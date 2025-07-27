@@ -35,3 +35,31 @@ export const generalValidationSchema = {
     body:Joi.string(),
    id:Joi.custom(idValidation)
 }
+
+
+
+
+export const validationGraphql = (args)=>{
+return ()=>{
+  const graphqlArgsSchema = Joi.object({
+
+    noteId:Joi.custom(idValidation),
+    title: Joi.string(),
+    fromDate: Joi.string().isoDate(),
+    toDate: Joi.string().isoDate(),
+    skip: Joi.number().integer().min(0),
+    limit: Joi.number().integer().min(1),
+});
+
+    const data = {
+    ...args
+    }
+    const result = graphqlArgsSchema.validate(data); 
+    let errors = [];
+    if(result.error){
+        errors.push(result.error.details[0].message)
+        throw new AppError((errors) , StatusCodes.BAD_REQUEST)
+    }
+    return
+}
+}

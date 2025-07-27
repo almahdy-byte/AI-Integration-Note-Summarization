@@ -1,9 +1,10 @@
 import { noteModel } from "../../../DB/models/note.model.js";
 import { authGraphql } from "../../../middleware/auth.middleware.js";
+import { validationGraphql } from "../../../middleware/validation.middleware.js";
 
 export const getNote = async (_, args, context) => {
  
-
+  await validationGraphql(args)
   const user = await authGraphql(context.authorization);
 
   const filter = {
